@@ -1,0 +1,31 @@
+{
+  "rules": {
+    "buses": {
+      ".read": true,
+      ".write": "root.child('admins').child(auth.uid).val() === true"
+    },
+    "routes": {
+      ".read": true,
+      ".write": "root.child('admins').child(auth.uid).val() === true"
+    },
+    "stops": {
+      ".read": true,
+      ".write": "root.child('admins').child(auth.uid).val() === true"
+    },
+    "schedules": {
+      ".read": true,
+      ".write": "root.child('admins').child(auth.uid).val() === true"
+    },
+    "admins": {
+      ".read": "auth != null && root.child('admins').child(auth.uid).val() === true",
+      ".write": false
+    },
+    "locations": {
+      ".read": true,
+      "$busId": {
+        ".write": "auth != null && (root.child('buses').child($busId).child('driverUid').val() === auth.uid || root.child('admins').child(auth.uid).val() === true)",
+        ".validate": "newData.hasChildren(['lat','lng','timestamp']) && newData.child('lat').val() >= -90 && newData.child('lat').val() <= 90 && newData.child('lng').val() >= -180 && newData.child('lng').val() <= 180"
+      }
+    }
+  }
+}
